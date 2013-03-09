@@ -1,7 +1,9 @@
-# Put licence?
+# Author: Stefan Eng
+# License: GPLv3
 
 import os
 import argparse
+import re
 
 from bs4 import BeautifulSoup
 from urllib2 import urlopen, URLError, HTTPError
@@ -18,7 +20,14 @@ def get_links(url, ext):
         html = urlopen(url)
         soup = BeautifulSoup(html)
         # Returns the found links matching extention
-        return soup.find_all('a') 
+        all_links = soup.find_all('a')
+        regex = re.compile ('.*\.' + ext)
+        new_links = [x for x in all_links if regex.search(x.get('href'))]
+        for i in new_links:
+            print i
+        # return all_links
+        return new_links
+        # return [x for x in all_links if re.search('.*\.' + ext, x)]
 
     except HTTPError, e:
         print "HTTP Error: ", e.code, url
@@ -49,13 +58,14 @@ def main():
     parser.add_argument('-v', '--verbose', help='display what is going on',
                         action='store_true')
     args = parser.parse_args()
+    links = get_links(args.url, args.ext)
     if args.verbose:
-        print get_links(args.url, args.ext)
-    else:
-        get_links(args.url, args.ext)
-    
-    # This is just a test pdf
-    save_link("http://www.elsevierdirect.com/downloads/SyngressFreeE-booklets/Certification/1597491535.pdf")
+        for x in links:
+            print os.path.basename(x)
+    if links:
+        print "There are links here"
+
+    #print os.path.basename("/home/stefan/.xmonad/xmonad.hs")
 
 
 if __name__ == '__main__':
