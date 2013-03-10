@@ -1,19 +1,16 @@
-PyDl
-====
+PyDl - Python Downloader v.01dev
+================================
 
-Python Downloader v.01dev
-----
-
-- Purpose:
-----
+Purpose:
+----------
 Downloads all files of an extention off of a website.
 
-- Use:
+Use:
 ----
 pydl [-flags] url extention
 
-- Flags:
-----
+Flags:
+------
 -v  --verbose    Prints out more information during execution
 -q  --quiet      Does prompt the user to accept downloads or name files		
 
