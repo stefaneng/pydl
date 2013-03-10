@@ -8,6 +8,7 @@ import re
 from os.path import basename
 from bs4 import BeautifulSoup
 from urllib2 import urlopen, URLError, HTTPError
+from urlparse import urljoin
 
 def get_links(url, ext, verbose=False):
     """
@@ -78,13 +79,14 @@ def main():
     for i in links:
         # Use does not want to be prompted, saves files with default name
         if args.quiet:
-            save_link(i.get('href'))
+            # urljoin is to fix relative urls and join them to original
+            save_link(urljoin(args.url,i.get('href')))
         else:
             print "Do you want to save: " + basename(i.get('href')) + " ?"
             var = raw_input("[y/n]: ")
             if var == 'y':
                 var = raw_input("Rename to: ")
-                save_link(i.get('href'),var)
+                save_link(urljoin(args.url,i.get('href')), var)
 
 if __name__ == '__main__':
     main()
